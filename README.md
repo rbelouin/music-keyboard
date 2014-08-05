@@ -25,4 +25,8 @@ TODO
 - Use a portable MIDI library
 - Emit sound while playing on the keyboard
 - Emit keyboard events instead of writing to stdout
-- Manage all connected MIDI devices instead of just one.
+
+CHANGELOG
+---------
+
+- 05/08/2014: Manage all connected MIDI devices instead of just one.

@@ -85,34 +85,35 @@ void readPackets(const MIDIPacketList* list, void* readProcRefCon, void* ref) {
   }
 }
 
-void listenMIDIEndpoints() {
-  /* Initialize state */
-  State state = {1, 0, {0, NULL}, NULL, NULL};
-
-  /* Get the MIDI endpoints */
-  MIDIEndpointRef src = MIDIGetSource(0);
-
+void listenMIDIEndpoint(State* state, MIDIEndpointRef src) {
   MIDIClientRef client;
   MIDIPortRef port;
 
   CFStringRef name = NULL;
-  //name of the endpoint
-  MIDIUniqueID sourceID = 0;
-  //source ID of the endpoint
 
   /* Get the properties of the given endpoint */
   MIDIObjectGetStringProperty(src, kMIDIPropertyName, &name);
-  MIDIObjectGetIntegerProperty(src, kMIDIPropertyUniqueID, &sourceID);
 
   /* Create a client and a port */
-  MIDIClientCreate(CFSTR("music-keyboard"), NULL, NULL, &client);
-  MIDIInputPortCreate(client, CFSTR("music-keyboard port"), readPackets, NULL, &port);
+  MIDIClientCreate(name, NULL, NULL, &client);
+  MIDIInputPortCreate(client, name, readPackets, NULL, &port);
 
   /* Link the port with the endpoint */
-  MIDIPortConnectSource(port, src, &state);
+  MIDIPortConnectSource(port, src, state);
 
   /* Print instructions */
-  fprintf(stderr, "MIDI source : %s (%d)\n", CFStringGetCStringPtr(name, kCFStringEncodingUTF8), sourceID);
+  fprintf(stderr, "listen to : %s\n", CFStringGetCStringPtr(name, kCFStringEncodingUTF8));
+}
+
+void listenMIDIEndpoints() {
+  /* Initialize state */
+  State state = {1, 0, {0, NULL}, NULL, NULL};
+
+  for (int i = 0; i < MIDIGetNumberOfSources(); i++) {
+    listenMIDIEndpoint(&state, MIDIGetSource(i));
+  }
+
+  /* Print instructions */
   fprintf(stderr, "Press sustain button while recording.\n\n");
 
   while (state.running) {

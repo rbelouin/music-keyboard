@@ -33,6 +33,8 @@ MIDICommand packet2command(MIDIPacket packet);
 
 void printNotes(State* state);
 void handleNote(MIDICommand* command, State* state);
+
+void listenMIDIEndpoint(State* state, MIDIEndpointRef src);
 void listenMIDIEndpoints();
 
 #endif
