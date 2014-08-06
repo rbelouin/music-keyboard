@@ -45,7 +45,7 @@ void mk_processEvent(mk_State* state, PmEvent event) {
       }
       break;
     case 176:
-      if (data2 == 127) {
+      if (data1 == 64 && data2 == 127) {
         if (state->sustainCount == 0) {
           state->sustainCount = 1;
           state->sustainTimestamp = event.timestamp;
