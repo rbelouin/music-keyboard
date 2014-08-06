@@ -1,12 +1,15 @@
 GCC=gcc
-FRAMEWORKS=-framework CoreServices -framework CoreMIDI
 EXEC=music-keyboard
-INSTALL_DIR=/usr/bin
+PREFIX=/usr
+DEST=$(PREFIX)/bin
 
 $(EXEC):
-	$(GCC) $(FRAMEWORKS) -o $(EXEC) src/*.c
+	$(GCC) -std=c99 -lportmidi -o $(EXEC) src/*.c
 
 install: $(EXEC)
-	cp $(EXEC) $(INSTALL_DIR)/$(EXEC)
+	cp $(EXEC) $(DEST)/$(EXEC)
+
+clean:
+	rm -f $(EXEC)
 
 all: install
