@@ -1,7 +1,7 @@
 GCC=gcc
 EXEC=music-keyboard
 DESTDIR?=/
-PREFIX=/usr
+PREFIX?=/usr
 
 $(EXEC):
 	$(GCC) -std=c99 -lportmidi -o $(EXEC) src/*.c
